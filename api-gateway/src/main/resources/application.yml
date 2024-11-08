@@ -1,9 +1,10 @@
-server:
-  port: 2008
-
 spring:
   application:
-    name: fraud-management
+    name: api-gateway
+
+server:
+  port: 8081
+
 
 eureka:
   client:

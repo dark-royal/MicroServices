@@ -3,12 +3,16 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/IdentityManagement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/IdentityManagement/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-gateway/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/apiGateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/apiGateway/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eurekaServer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eurekaServer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fraudManagement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fraudManagement/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/identity-management/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/identity-management/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
