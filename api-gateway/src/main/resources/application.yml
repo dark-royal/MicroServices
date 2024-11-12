@@ -10,3 +10,33 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:2009/eureka/
+
+
+cloud:
+  gateway:
+    discovery:
+      locator:
+        enabled: true
+        lower-case-service-id: true
+    routes:
+      - id: identity-management
+        uri: lb://IDENTITY-MANAGEMENT            # Replace with the registered Eureka service ID
+        predicates:
+          - Path=/service/**
+        filters:
+          - RemoveRequestHeader=Cookie
+
+    default-filters:
+      - TokenRelay
+
+security:
+  oauth2:
+    client:
+      provider:
+        keycloak:
+          issuer-uri: http://localhost:9799/auth/realms/identity
+      registration:
+        keycloak:
+          client-id: identity-app
+          client-secret: ipvU92N5WKdnsVThf0q9qI5tuH1IEGwX
+          scope: openid

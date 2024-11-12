@@ -2,6 +2,7 @@ spring:
   application:
     name: identity-management
 
+
 eureka:
   client:
     service-url:
@@ -10,8 +11,10 @@ eureka:
 app:
   keycloak:
     admin:
-      clientId: admin-cli
-      clientSecret: IaYscf7zVFVoPUB6iCvxl6ilMDLaUEW3
-    realm: spring
-    serverUrl: http://localhost:9082
-    tokenUrl: http://localhost:9082/realms/spring/protocol/openid-connect/token
+      clientId: identity-app
+      clientSecret: ipvU92N5WKdnsVThf0q9qI5tuH1IEGwX
+    realm: identity
+    serverUrl: http://localhost:9799
+    tokenUrl: http://localhost:9799/realms/identity/protocol/openid-connect/token
+server:
+  port: 6841

@@ -13,6 +13,7 @@
         <module>eurekaServer</module>
         <module>api-gateway</module>
         <module>identity-management</module>
+        <module>pulsar</module>
     </modules>
 
     <properties>
