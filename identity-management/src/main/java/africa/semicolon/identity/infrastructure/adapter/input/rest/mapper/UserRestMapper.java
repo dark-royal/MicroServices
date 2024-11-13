@@ -17,10 +17,6 @@ public interface UserRestMapper {
 
         User toUser(EditProfileRequest editProfileRequest);
         EditProfileResponse toEditProfileResponse(User user);
-
-        User toUser(FindUserRequest findUserRequest);
-        FindUserResponse toFindUserResponse(User user);
-
         LoginUserResponse toLoginUserResponse(LoginUserRequest loginUserRequest);
 
 

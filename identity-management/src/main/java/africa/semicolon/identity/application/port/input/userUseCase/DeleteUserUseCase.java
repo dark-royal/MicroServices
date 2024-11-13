@@ -4,5 +4,5 @@ import africa.semicolon.identity.domain.Exceptions.UserNotFoundException;
 
 public interface DeleteUserUseCase {
 
-    void deleteUser(Long id) throws UserNotFoundException;
+    void deleteUser(String username) throws UserNotFoundException;
 }

@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CreateUserResponse {
     private Long id;
-    private User user;
     private String firstName;
     private String lastName;
     private String role;

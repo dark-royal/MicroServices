@@ -62,22 +62,6 @@ public class UserRestMapperImpl implements UserRestMapper {
         return editProfileResponse;
     }
 
-    @Override
-    public User toUser(FindUserRequest findUserRequest) {
-        User user = new User();
-        user.setEmail(findUserRequest.getEmail());
-        return user;
-    }
-
-    @Override
-    public FindUserResponse toFindUserResponse(User user) {
-        FindUserResponse findUserResponse = new FindUserResponse();
-        findUserResponse.setId(user.getId());
-        findUserResponse.setName(user.getFirstName());
-        findUserResponse.setEmail(user.getEmail());
-        findUserResponse.setPhoneNumber(user.getPhoneNumber());
-        return findUserResponse;
-    }
 
     @Override
     public LoginUserResponse toLoginUserResponse(LoginUserRequest loginUserRequest) {

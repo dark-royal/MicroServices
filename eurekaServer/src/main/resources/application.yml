@@ -1,5 +1,5 @@
 server:
-  port: 2009
+  port: 8761
 spring:
   application:
     name: eureka-server

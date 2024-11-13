@@ -3,6 +3,7 @@ package africa.semicolon.identity.infrastructure.adapter;
 import africa.semicolon.identity.application.port.output.IdentityManagerOutputPort;
 import africa.semicolon.identity.application.port.output.UserOutputPort;
 import africa.semicolon.identity.domain.Exceptions.AuthenticationException;
+import africa.semicolon.identity.domain.Exceptions.UserAlreadyExistsException;
 import africa.semicolon.identity.domain.Exceptions.UserNotFoundException;
 import africa.semicolon.identity.domain.models.User;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.request.LoginUserRequest;
@@ -61,13 +62,13 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
     }
 
     @Override
-    public User createUser(User user) throws UserNotFoundException {
+    public User createUser(User user) throws UserAlreadyExistsException {
         UserRepresentation userRepresentation = createUserRepresentation(user);
         Response response = getUsersResource().create(userRepresentation);
         log.info("Keycloak user creation response status: {}", response.getStatus());
-
+        log.info("craeted:{}",response);
         if (response.getStatus() != STATUS_CREATED) {
-            throw new UserNotFoundException("Failed to create user in Keycloak");
+            throw new UserAlreadyExistsException("Failed to create user in Keycloak");
         }
         String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
         assignRole(userId, user.getRole());
@@ -99,8 +100,9 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
     }
 
     @Override
-    public void deleteUser(String id) {
-        getUsersResource().delete(id);
+    public void deleteUser(String username) {
+        UserRepresentation userByUsername = getUserByUsername(username);
+        keycloak.realm(realm).users().get(userByUsername.getId()).remove();
     }
 
     private UserRepresentation createUserRepresentation(User user) {
@@ -174,14 +176,20 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
     }
 
     @Override
-    public void editUser(String keycloakId, User user){
-//        UserResource userResource = getUsersResource().get(keycloakId);
-        UserRepresentation userRepresentation = getUsersResource().search(keycloakId, true).getFirst();
+    public User editUser(String email, User user){
+//        UserResource userResource = getUsersResource().get(email);
+        UserRepresentation userRepresentation = null;
+        try {
+            userRepresentation = getUsersResource().search(email, true).getFirst();
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e.getMessage());
+        }
         UserResource userResource = getUsersResource().get(userRepresentation.getId());
         if(user.getEmail() != null) userRepresentation.setEmail(user.getEmail());
         if(user.getFirstName() != null) userRepresentation.setFirstName(user.getFirstName());
         if(user.getLastName() != null) userRepresentation.setLastName(user.getLastName());
         if(user.getEmail() != null) userRepresentation.setUsername(user.getEmail());
         userResource.update(userRepresentation);
+        return user;
     }
 }
