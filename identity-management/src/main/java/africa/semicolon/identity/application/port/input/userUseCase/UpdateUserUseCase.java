@@ -6,5 +6,5 @@ import africa.semicolon.identity.domain.Exceptions.UserNotFoundException;
 import africa.semicolon.identity.domain.models.User;
 
 public interface UpdateUserUseCase {
-    User updateUser(User user)throws UserNotFoundException, PhoneNumberNotFoundException, UserAlreadyExistsException;
+    User updateUser(User user) throws Exception;
 }

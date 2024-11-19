@@ -5,14 +5,11 @@ import africa.semicolon.identity.domain.models.User;
 import africa.semicolon.identity.application.port.input.userUseCase.*;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.request.CreateUserRequest;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.request.EditProfileRequest;
-import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.request.FindUserRequest;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.request.LoginUserRequest;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.response.CreateUserResponse;
-import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.response.FindUserResponse;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.response.LoginUserResponse;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.mapper.UserRestMapper;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,8 +37,8 @@ public class KeycloakRestAdapter {
             createUserRequest.setPassword(passwordEncoder.encode(user.getPassword()));
             user = registerUseCase.createUser(user);
             return new ResponseEntity<>(userRestMapper.tocreateUserResponse(user), HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            throw new UserAlreadyExistsException(e.getMessage());
 
         }
     }
@@ -77,6 +74,8 @@ public class KeycloakRestAdapter {
             return new ResponseEntity<>(userRestMapper.toEditProfileResponse(user), HttpStatus.OK);
         } catch (UserNotFoundException e) {
             throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
 

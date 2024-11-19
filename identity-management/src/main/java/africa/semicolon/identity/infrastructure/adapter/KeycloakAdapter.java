@@ -92,6 +92,7 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
         }
     }
 
+
     @Override
     public void assignRole(String userId, String role) {
         UserResource user = getUserById(userId);
@@ -184,11 +185,11 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
         } catch (UserNotFoundException e) {
             throw new RuntimeException(e.getMessage());
         }
-        UserResource userResource = getUsersResource().get(userRepresentation.getId());
+        UserResource userResource = getUsersResource().get(userRepresentation.getEmail());
         if(user.getEmail() != null) userRepresentation.setEmail(user.getEmail());
         if(user.getFirstName() != null) userRepresentation.setFirstName(user.getFirstName());
         if(user.getLastName() != null) userRepresentation.setLastName(user.getLastName());
-        if(user.getEmail() != null) userRepresentation.setUsername(user.getEmail());
+        //if(user.getEmail() != null) userRepresentation.setUsername(user.getEmail());
         userResource.update(userRepresentation);
         return user;
     }

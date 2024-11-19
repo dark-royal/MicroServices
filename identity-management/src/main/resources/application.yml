@@ -5,7 +5,9 @@ spring:
     url: jdbc:postgresql://localhost/Identity_Manager
     password: oluwakemisola098
     username: postgres
-
+  pulsar:
+    client:
+          service-url: pulsar://localhost:6650
 
 eureka:
   client:

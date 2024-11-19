@@ -6,5 +6,5 @@ import africa.semicolon.identity.domain.models.User;
 
 public interface RegisterUseCase {
 
-    User createUser(User user) throws UserAlreadyExistsException, UserNotFoundException;
+    User createUser(User user) throws Exception;
 }

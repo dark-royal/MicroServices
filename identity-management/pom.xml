@@ -56,17 +56,21 @@
             <artifactId>keycloak-admin-client</artifactId>
             <version>${keycloak.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-pulsar</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>
             <version>24.0.5</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>africa.semicolon</groupId>-->
-<!--            <artifactId>pulsar</artifactId>-->
-<!--            <version>1.0-SNAPSHOT</version> &lt;!&ndash; Adjust as necessary &ndash;&gt;-->
-<!--        </dependency>-->
+
+
     </dependencies>
 
 </project>

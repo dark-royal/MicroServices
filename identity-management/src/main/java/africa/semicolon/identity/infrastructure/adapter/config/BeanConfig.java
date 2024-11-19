@@ -1,10 +1,8 @@
 package africa.semicolon.identity.infrastructure.adapter.config;
 
-import africa.semicolon.identity.application.port.input.userUseCase.FindUserUseCase;
-import africa.semicolon.identity.application.port.output.IdentityManagerOutputPort;
-import africa.semicolon.identity.application.port.output.SmileIdOutputPort;
 import africa.semicolon.identity.application.port.output.UserOutputPort;
 import africa.semicolon.identity.domain.services.AuthService;
+import africa.semicolon.identity.infrastructure.adapter.IdentityPulserProducer;
 import africa.semicolon.identity.infrastructure.adapter.KeycloakAdapter;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.mapper.UserRestMapper;
 import africa.semicolon.identity.infrastructure.adapter.persistence.UserPersistenceAdapter;
@@ -16,10 +14,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.keycloak.admin.client.Keycloak;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.pulsar.core.PulsarProducerFactory;
+import org.springframework.pulsar.core.PulsarTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
-//import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class BeanConfig {
@@ -39,6 +38,12 @@ public class BeanConfig {
 
     }
 
+    @Bean
+    public PulsarTemplate<String> pulsarTemplate(PulsarProducerFactory<String> producerFactory) {
+        return new PulsarTemplate<>(producerFactory);
+    }
+
+
 
     @Bean
     public RestTemplate restTemplate(){
@@ -50,10 +55,7 @@ public class BeanConfig {
     public UserPersistenceMapper userPersistenceMapper(){
         return new UserPersistenceMapperImpl();
     }
-//    @Bean
-//    public SmileIdAdapter premblyAdapter(RestTemplate restTemplate, WebClient.Builder webClientBuilder){
-//        return  new SmileIdAdapter(restTemplate,webClientBuilder);
-//    }
+
     @Bean
     public UserRestMapper userRestMapper(){
         return new UserRestMapperImpl();
@@ -61,7 +63,12 @@ public class BeanConfig {
 
 
 @Bean
-    public AuthService authService(KeycloakAdapter keycloakAdapter){
-        return new AuthService(keycloakAdapter);
+    public AuthService authService(KeycloakAdapter keycloakAdapter, IdentityPulserProducer pulserProducer){
+        return new AuthService(keycloakAdapter,pulserProducer);
+}
+
+@Bean
+    public IdentityPulserProducer identityPulserProducer() throws Exception {
+        return new IdentityPulserProducer();
 }
 }
