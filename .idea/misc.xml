@@ -11,6 +11,8 @@
       <set>
         <option value="$PROJECT_DIR$/IdentityManagement/pom.xml" />
         <option value="$PROJECT_DIR$/apiGateway/pom.xml" />
+        <option value="$PROJECT_DIR$/pulsar/pom.xml" />
+        <option value="$PROJECT_DIR$/wallet-service/pom.xml" />
       </set>
     </option>
   </component>

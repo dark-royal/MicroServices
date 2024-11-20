@@ -1,4 +1,4 @@
-package africa.semicolon.wallet.domain.models;
+package africa.semicolon.domain.models;
 
 import lombok.*;
 
@@ -13,5 +13,6 @@ import java.time.LocalDateTime;
 public class Wallet {
     private Long id;
     private BigDecimal balance;
+    private String pin;
 
 }

@@ -1,6 +1,6 @@
 package africa.semicolon.infrastructure.adapter.persistence.entities;
 
-import africa.semicolon.wallet.domain.models.Role;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

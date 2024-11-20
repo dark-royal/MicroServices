@@ -1,15 +1,12 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response;
+package africa.semicolon.infrastructure.adapter.input.rest.dtos.response;
 
-import africa.semicolon.wallet.domain.models.Status;
-import africa.semicolon.wallet.domain.models.TransactionType;
-import lombok.Builder;
+import africa.semicolon.domain.models.Status;
+import africa.semicolon.domain.models.TransactionType;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 @Setter
 @Getter
-
 public class GetAllTransactionResponse {
     private Long userId;
     private TransactionType transactionType;

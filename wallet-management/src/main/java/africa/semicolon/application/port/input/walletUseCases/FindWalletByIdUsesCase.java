@@ -1,7 +1,8 @@
-package africa.semicolon.wallet.application.port.input.walletUseCases;
+package africa.semicolon.application.port.input.walletUseCases;
 
-import africa.semicolon.wallet.domain.exceptions.WalletNotFoundException;
-import africa.semicolon.wallet.domain.models.Wallet;
+
+import africa.semicolon.domain.exceptions.WalletNotFoundException;
+import africa.semicolon.domain.models.Wallet;
 
 public interface FindWalletByIdUsesCase {
     Wallet findWalletById(Long id) throws WalletNotFoundException;

@@ -1,4 +1,4 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request;
+package africa.semicolon.infrastructure.adapter.input.rest.dtos.request;
 
 import lombok.Getter;
 import lombok.Setter;

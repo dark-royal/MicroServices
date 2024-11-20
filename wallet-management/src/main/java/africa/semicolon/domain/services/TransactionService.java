@@ -1,32 +1,27 @@
-package africa.semicolon.wallet.domain.service;
+package africa.semicolon.domain.services;
 
-import africa.semicolon.wallet.application.port.input.TransactionUseCase.CreateTransactionUseCase;
-import africa.semicolon.wallet.application.port.input.TransactionUseCase.GetAllTransactionByUserIdUseCase;
-import africa.semicolon.wallet.application.port.output.TransactionOutputPort;
-import africa.semicolon.wallet.domain.exceptions.UserNotFoundException;
-import africa.semicolon.wallet.domain.models.Transaction;
-import africa.semicolon.wallet.domain.models.User;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.TransactionEntity;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.UserEntity;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.mappers.TransactionPersistenceMapper;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.repositories.UserRepository;
 
+import africa.semicolon.application.port.input.TransactionUseCase.CreateTransactionUseCase;
+import africa.semicolon.application.port.input.TransactionUseCase.GetAllTransactionByUserIdUseCase;
+import africa.semicolon.application.port.output.TransactionOutputPort;
+import africa.semicolon.application.port.output.UserOutputPort;
+import africa.semicolon.domain.exceptions.UserNotFoundException;
+import africa.semicolon.domain.models.Transaction;
+import africa.semicolon.domain.models.User;
+import africa.semicolon.infrastructure.adapter.persistence.entities.TransactionEntity;
+import africa.semicolon.infrastructure.adapter.persistence.mappers.TransactionPersistenceMapper;
 import java.util.List;
-import java.util.Optional;
-
-
 public class TransactionService implements CreateTransactionUseCase, GetAllTransactionByUserIdUseCase {
 
     private final TransactionOutputPort transactionOutputPort;
-    private final UserRepository userRepository;
     private final TransactionPersistenceMapper transactionPersistenceMapper;
+    private final UserOutputPort userOutputPort;
 
 
-    public TransactionService(TransactionOutputPort transactionOutputPort, UserRepository userRepository, TransactionPersistenceMapper transactionPersistenceMapper) {
+    public TransactionService(TransactionOutputPort transactionOutputPort, TransactionPersistenceMapper transactionPersistenceMapper, UserOutputPort userOutputPort) {
         this.transactionOutputPort = transactionOutputPort;
-
-        this.userRepository = userRepository;
         this.transactionPersistenceMapper = transactionPersistenceMapper;
+        this.userOutputPort = userOutputPort;
     }
 
     @Override
@@ -37,9 +32,10 @@ public class TransactionService implements CreateTransactionUseCase, GetAllTrans
 
     @Override
     public List<Transaction> getAllTransactionByUserId(Long userId) throws UserNotFoundException {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("User not found");
-        }
+       User user = userOutputPort.getUserById(userId);
+       if(user == null) {
+           throw new UserNotFoundException("user not found");
+       }
         List<TransactionEntity> entities =  transactionOutputPort.getAllTransactionById(userId);
         return entities.stream().map(transactionPersistenceMapper::toTransaction).toList();
 

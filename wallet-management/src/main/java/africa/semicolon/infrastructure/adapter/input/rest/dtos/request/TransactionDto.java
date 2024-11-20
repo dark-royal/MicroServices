@@ -1,6 +1,6 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request;
+package africa.semicolon.infrastructure.adapter.input.rest.dtos.request;
 
-import africa.semicolon.wallet.domain.models.TransactionType;
+import africa.semicolon.domain.models.TransactionType;
 import lombok.Getter;
 import lombok.Setter;
 

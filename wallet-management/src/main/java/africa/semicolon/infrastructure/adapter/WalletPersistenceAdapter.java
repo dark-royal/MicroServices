@@ -1,10 +1,11 @@
-package africa.semicolon.wallet.infrastructure.adapter.persistence;
+package africa.semicolon.infrastructure.adapter;
 
-import africa.semicolon.wallet.application.port.output.WalletOutputPort;
-import africa.semicolon.wallet.domain.models.Wallet;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.WalletEntity;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.mappers.WalletPersistenceMapper;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.repositories.WalletRepository;
+
+import africa.semicolon.application.port.output.WalletOutputPort;
+import africa.semicolon.domain.models.Wallet;
+import africa.semicolon.infrastructure.adapter.persistence.entities.WalletEntity;
+import africa.semicolon.infrastructure.adapter.persistence.mappers.WalletPersistenceMapper;
+import africa.semicolon.infrastructure.adapter.persistence.repositories.WalletRepository;
 
 import java.util.Optional;
 
@@ -30,4 +31,5 @@ public class WalletPersistenceAdapter implements WalletOutputPort {
         final Optional<WalletEntity> walletEntity = walletRepository.findById(id);
         return walletEntity.map(walletPersistenceMapper::toWallet);
     }
+
 }

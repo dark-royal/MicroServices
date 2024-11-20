@@ -1,18 +1,16 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.mappers;
+package africa.semicolon.infrastructure.adapter.input.rest.mappers;
 
-import africa.semicolon.wallet.domain.models.User;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.CreateUserRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.EditProfileRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.FindUserRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.LoginUserRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.CreateUserResponse;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.EditProfileResponse;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.FindUserResponse;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.LoginUserResponse;
+
+import africa.semicolon.domain.models.User;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.CreateUserRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.EditProfileRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.CreateUserResponse;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.EditProfileResponse;
 
 import java.time.LocalDateTime;
 
 public class UserRestMapperImpl implements UserRestMapper {
+
     @Override
     public User toUser(CreateUserRequest createUserRequest) {
        User user = new User();
@@ -58,25 +56,4 @@ public class UserRestMapperImpl implements UserRestMapper {
         return editProfileResponse;
     }
 
-    @Override
-    public User toUser(FindUserRequest findUserRequest) {
-        User user = new User();
-        user.setEmail(findUserRequest.getEmail());
-        return user;
-    }
-
-    @Override
-    public FindUserResponse toFindUserResponse(User user) {
-        FindUserResponse findUserResponse = new FindUserResponse();
-        findUserResponse.setId(user.getId());
-        findUserResponse.setName(user.getFirstName());
-        findUserResponse.setEmail(user.getEmail());
-        findUserResponse.setPhoneNumber(user.getPhoneNumber());
-        return findUserResponse;
-    }
-
-    @Override
-    public LoginUserResponse toLoginUserResponse(LoginUserRequest loginUserRequest) {
-        return null;
-    }
 }

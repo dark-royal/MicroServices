@@ -1,4 +1,4 @@
-package africa.semicolon.wallet.domain.models;
+package africa.semicolon.domain.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,15 +15,3 @@ public class TransactionDetails {
     private LocalDateTime date;
     private TransactionType transactionType;
 }
-//@Override
-//public TransactionResponse viewAllTransactions(Long userId) throws UserNotFoundException {
-//    if (!userOutputPort.existById(userId)) throw new UserNotFoundException("User not found");
-//
-//    List<Transaction> transactions = transactionService.getAllTransactionByUserId(userId);
-//
-//    List<TransactionDetail> transactionDetails = transactions.stream()
-//        .map(tx -> new TransactionDetail(tx.getId(), tx.getAmount(), tx.getType(), tx.getDate()))
-//        .collect(Collectors.toList());
-//
-//    return new TransactionResponse(userId, transactionDetails);
-//}

@@ -9,7 +9,6 @@ import africa.semicolon.identity.infrastructure.adapter.KeycloakAdapter;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.request.LoginUserRequest;
 import africa.semicolon.identity.infrastructure.adapter.input.rest.dtos.response.LoginUserResponse;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.client.api.PulsarClientException;
 
 @AllArgsConstructor
@@ -59,6 +58,7 @@ public class AuthService implements RegisterUseCase, LoginUseCase, UpdateUserUse
         }
         return user;
     }
+
 
 
 }

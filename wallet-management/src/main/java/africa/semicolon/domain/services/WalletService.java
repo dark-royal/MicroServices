@@ -1,54 +1,50 @@
-package africa.semicolon.wallet.domain.service;
+package africa.semicolon.domain.services;
 
-import africa.semicolon.wallet.application.port.input.walletUseCases.*;
-import africa.semicolon.wallet.application.port.output.PaystackPaymentOutputPort;
-import africa.semicolon.wallet.application.port.output.UserOutputPort;
-import africa.semicolon.wallet.application.port.output.WalletOutputPort;
-import africa.semicolon.wallet.domain.exceptions.UserNotFoundException;
-import africa.semicolon.wallet.domain.exceptions.WalletAlreadyExistAlreadyException;
-import africa.semicolon.wallet.domain.exceptions.WalletNotFoundException;
-import africa.semicolon.wallet.domain.models.Wallet;
-import africa.semicolon.wallet.infrastructure.adapter.paystack.PayStackAdapter;
-import africa.semicolon.wallet.infrastructure.adapter.paystack.dtos.InitializePaymentDto;
-import africa.semicolon.wallet.infrastructure.adapter.paystack.dtos.response.InitializePaymentResponse;
-import africa.semicolon.wallet.infrastructure.adapter.paystack.dtos.response.TransferRecipientResponse;
-import africa.semicolon.wallet.infrastructure.adapter.paystack.dtos.response.TransferResponse;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.UserPersistenceAdapter;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.UserEntity;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.WalletEntity;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.repositories.UserRepository;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.repositories.WalletRepository;
+
+
+import africa.semicolon.application.port.input.walletUseCases.*;
+import africa.semicolon.application.port.output.MonnifyOutputPort;
+import africa.semicolon.application.port.output.TransactionOutputPort;
+import africa.semicolon.application.port.output.UserOutputPort;
+import africa.semicolon.application.port.output.WalletOutputPort;
+import africa.semicolon.domain.exceptions.UserNotFoundException;
+import africa.semicolon.domain.exceptions.WalletAlreadyExistAlreadyException;
+import africa.semicolon.domain.exceptions.WalletNotFoundException;
+import africa.semicolon.domain.models.Transaction;
+import africa.semicolon.domain.models.User;
+import africa.semicolon.domain.models.Wallet;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializePaymentRequestDto;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializeTransferRequest;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializeMonnifyTransferResponse;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializePaymentResponseDto;
+import africa.semicolon.infrastructure.adapter.persistence.mappers.TransactionPersistenceMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 
 @Slf4j
-public class WalletService implements CreateWalletUseCase, FindWalletByIdUsesCase, DepositToWalletUseCase,WithdrawUseCase {
+public class WalletService implements CreateWalletUseCase, FindWalletByIdUsesCase, DepositToWalletUseCase, TransferUseCase, GetAllWalletTransactionByUserId {
 
 
     private final WalletOutputPort walletOutputPort;
-
-    private final PaystackPaymentOutputPort paystackPaymentOutputPort;
-    private final WalletRepository walletRepository;
-    private final UserRepository userRepository;
+    private final MonnifyOutputPort monnifyOutputPort;
     private final UserOutputPort userOutputPort;
-    private final PayStackAdapter payStackAdapter;
-    private final UserPersistenceAdapter userPersistenceAdapter;
+    private final TransactionOutputPort transactionOutputPort;
+    private final TransactionPersistenceMapper transactionPersistenceMapper;
 
 
-
-    public WalletService(WalletOutputPort walletOutputPort, PaystackPaymentOutputPort paystackPaymentOutputPort, WalletRepository walletRepository, UserRepository userRepository, UserOutputPort userOutputPort, PayStackAdapter payStackAdapter, UserPersistenceAdapter userPersistenceAdapter) {
+    public WalletService(WalletOutputPort walletOutputPort, MonnifyOutputPort monnifyOutputPort, UserOutputPort userOutputPort, TransactionOutputPort transactionOutputPort, TransactionPersistenceMapper transactionPersistenceMapper) {
         this.walletOutputPort = walletOutputPort;
-        this.paystackPaymentOutputPort = paystackPaymentOutputPort;
-        this.walletRepository = walletRepository;
-        this.userRepository = userRepository;
+        this.monnifyOutputPort = monnifyOutputPort;
         this.userOutputPort = userOutputPort;
-        this.payStackAdapter = payStackAdapter;
-        this.userPersistenceAdapter = userPersistenceAdapter;
+        this.transactionOutputPort = transactionOutputPort;
+        this.transactionPersistenceMapper = transactionPersistenceMapper;
     }
+
     @Override
     public Wallet createWallet(Wallet wallet) throws WalletAlreadyExistAlreadyException {
         verifyWalletExistence(wallet.getId());
@@ -72,43 +68,79 @@ public class WalletService implements CreateWalletUseCase, FindWalletByIdUsesCas
             throw new WalletAlreadyExistAlreadyException("Wallet exists already");
         }
     }
+
     @Override
-    public void depositToWallet(Wallet wallet, BigDecimal amount, Long userId) throws WalletNotFoundException, UserNotFoundException {
-        wallet = walletOutputPort.getWalletById(wallet.getId()).orElseThrow(() -> new WalletNotFoundException("Wallet not found"));
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
-        InitializePaymentDto initializePaymentDto = InitializePaymentDto.builder()
+    public void depositToWallet(Wallet wallet, Float amount, Long userId) throws WalletNotFoundException, UserNotFoundException {
+        wallet = walletOutputPort.getWalletById(wallet.getId())
+                .orElseThrow(() -> new WalletNotFoundException("Wallet not found"));
+
+        User user = userOutputPort.getUserById(userId);
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        InitializePaymentRequestDto initializePaymentDto = InitializePaymentRequestDto.builder()
                 .amount(amount)
-                .email(user.getEmail())
-                .currency("NGN")
+                .customerEmail(user.getEmail())
+                .customerName(user.getFirstName())
+                .paymentDescription("Wallet Deposit")
+                .currencyCode("NGN")
                 .build();
 
-        InitializePaymentResponse response = payStackAdapter.initializePayment(initializePaymentDto);
-        log.info("This is the message{}", response);
-        response.setMessage("Deposit to wallet successful");
+        InitializePaymentResponseDto response = monnifyOutputPort.initializePayment(initializePaymentDto);
+        log.info("Monnify response: {}", response);
 
-        wallet.setBalance(wallet.getBalance().add(amount));
-        walletOutputPort.saveWallet(wallet);
+        if (response != null && response.isRequestSuccessful()) {
+            wallet.setBalance(wallet.getBalance().add(BigDecimal.valueOf(amount)));
+            walletOutputPort.saveWallet(wallet);
+        } else {
+            log.warn("Failed to initialize deposit transaction: {}", response.getResponseMessage());
+            throw new RuntimeException("Deposit initialization failed. Please try again later.");
+        }
+    }
+
+
+    @Override
+    public void transfer(Wallet wallet, Float amount, Long userId, String receiverAccountNumber) throws WalletNotFoundException, UserNotFoundException {
+        wallet = walletOutputPort.getWalletById(wallet.getId())
+                .orElseThrow(() -> new WalletNotFoundException("Wallet not found"));
+
+        User user = userOutputPort.getUserById(userId);
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        InitializeTransferRequest transferRequest = new InitializeTransferRequest();
+        transferRequest.setAmount(amount);
+        transferRequest.setReceiverAccountNumber(receiverAccountNumber);
+        transferRequest.setNarration("Transfer to account");
+
+        InitializeMonnifyTransferResponse transferResponse = monnifyOutputPort.transfer(transferRequest);
+        log.info("Monnify transfer response: {}", transferResponse);
+
+        if (transferResponse != null && transferResponse.isRequestSuccessful()) {
+            wallet.setBalance(wallet.getBalance().subtract(BigDecimal.valueOf(amount)));
+            walletOutputPort.saveWallet(wallet);
+        } else {
+            log.warn("Failed to initiate transfer: {}", transferResponse.getResponseMessage());
+            throw new RuntimeException("Transfer failed. Please try again later.");
+        }
     }
 
     @Override
-    public void withdrawFromWallet(WalletEntity wallet, BigDecimal amount, String accountNumber, String bankCode, Long userId) throws Exception {
-        wallet = walletRepository.findById(wallet.getId()).orElseThrow(() -> new WalletNotFoundException("Wallet not found"));
-        UserEntity user = userPersistenceAdapter.getUserEntityById(userId);
-        String userName = user.getFirstName();
-
-        TransferRecipientResponse recipientResponse = payStackAdapter.createRecipient(userName, accountNumber, bankCode);
-        String recipientCode = recipientResponse.data.getRecipientCode();
-
-        TransferResponse transferResponse = payStackAdapter.initiateWithdrawal(amount, recipientCode, "Withdrawal from wallet");
-        if (transferResponse.getStatus().equals("success")) {
-            wallet.setBalance(wallet.getBalance().subtract(amount));
-            walletRepository.save(wallet);
-            System.out.println("Withdrawal successful: " + transferResponse.getData());
-        } else {
-            throw new Exception("Withdrawal failed: " + transferResponse.getMessage());
+    public List<Transaction> getAllTransactionsForUser(Long userId) throws UserNotFoundException {
+        User user = userOutputPort.getUserById(userId);
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
         }
+        return transactionOutputPort.getAllTransactionById(userId)
+                .stream()
+                .map(transactionPersistenceMapper::toTransaction)
+                .collect(Collectors.toList());
+
     }
-    }
+
+}
 
 
 

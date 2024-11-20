@@ -1,4 +1,4 @@
-package africa.semicolon.wallet.domain.exceptions;
+package africa.semicolon.domain.exceptions;
 
 public class UserNotFoundException extends WalletException {
     public UserNotFoundException(String message) {

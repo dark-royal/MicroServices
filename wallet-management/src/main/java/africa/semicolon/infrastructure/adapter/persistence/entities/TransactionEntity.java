@@ -1,7 +1,8 @@
 package africa.semicolon.infrastructure.adapter.persistence.entities;
 
-import africa.semicolon.wallet.domain.models.Status;
-import africa.semicolon.wallet.domain.models.TransactionType;
+
+import africa.semicolon.domain.models.Status;
+import africa.semicolon.domain.models.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 

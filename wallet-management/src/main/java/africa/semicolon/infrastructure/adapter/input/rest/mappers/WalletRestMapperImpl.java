@@ -1,12 +1,12 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.mappers;
+package africa.semicolon.infrastructure.adapter.input.rest.mappers;
 
-import africa.semicolon.wallet.domain.models.Wallet;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.CreateWalletRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.DepositToWalletRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.FindWalletRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.CreateWalletResponse;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.DepositToWalletResponse;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.FindWalletResponse;
+import africa.semicolon.domain.models.Wallet;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.CreateWalletRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.DepositToWalletRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.FindWalletRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.CreateWalletResponse;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.DepositToWalletResponse;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.FindWalletResponse;
 
 import java.time.LocalDateTime;
 

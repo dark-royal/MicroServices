@@ -1,6 +1,7 @@
-package africa.semicolon.wallet.application.port.output;
+package africa.semicolon.application.port.output;
 
-import africa.semicolon.wallet.domain.models.Wallet;
+
+import africa.semicolon.domain.models.Wallet;
 
 import java.util.Optional;
 

@@ -1,8 +1,8 @@
-package africa.semicolon.wallet.application.port.input.userUseCases;
+package africa.semicolon.application.port.input.userUseCases;
 
-import africa.semicolon.wallet.domain.exceptions.UserNotFoundException;
-import africa.semicolon.wallet.domain.models.User;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.UserEntity;
+
+import africa.semicolon.domain.exceptions.UserNotFoundException;
+import africa.semicolon.domain.models.User;
 
 public interface GetUserUseCase {
     User getUserById(Long id) throws UserNotFoundException;

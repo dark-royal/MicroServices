@@ -1,7 +1,7 @@
-package africa.semicolon.wallet.application.port.input.TransactionUseCase;
+package africa.semicolon.application.port.input.TransactionUseCase;
 
-import africa.semicolon.wallet.domain.models.Transaction;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.TransactionDto;
+
+import africa.semicolon.domain.models.Transaction;
 
 public interface CreateTransactionUseCase {
     Transaction createTransaction(Transaction transaction);

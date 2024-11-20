@@ -1,7 +1,8 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response;
+package africa.semicolon.infrastructure.adapter.input.rest.dtos.response;
 
-import africa.semicolon.wallet.domain.models.User;
-import africa.semicolon.wallet.domain.models.Wallet;
+
+import africa.semicolon.domain.models.User;
+import africa.semicolon.domain.models.Wallet;
 import lombok.*;
 
 @Builder

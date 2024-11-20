@@ -1,14 +1,13 @@
-package africa.semicolon.wallet.infrastructure.adapter.persistence;
+package africa.semicolon.infrastructure.adapter;
 
-import africa.semicolon.wallet.application.port.output.TransactionOutputPort;
-import africa.semicolon.wallet.domain.exceptions.TransactionNotFoundException;
-import africa.semicolon.wallet.domain.exceptions.UserNotFoundException;
-import africa.semicolon.wallet.domain.models.Transaction;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.TransactionEntity;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.mappers.TransactionPersistenceMapper;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.repositories.TransactionRepository;
 
-import java.util.Collections;
+import africa.semicolon.application.port.output.TransactionOutputPort;
+import africa.semicolon.domain.exceptions.TransactionNotFoundException;
+import africa.semicolon.domain.models.Transaction;
+import africa.semicolon.infrastructure.adapter.persistence.entities.TransactionEntity;
+import africa.semicolon.infrastructure.adapter.persistence.mappers.TransactionPersistenceMapper;
+import africa.semicolon.infrastructure.adapter.persistence.repositories.TransactionRepository;
+
 import java.util.List;
 import java.util.Optional;
 

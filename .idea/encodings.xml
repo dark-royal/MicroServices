@@ -13,9 +13,15 @@
     <file url="file://$PROJECT_DIR$/fraudManagement/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/identity-management/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/identity-management/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/payment-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/payment-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/pulsar/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/pulsar/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wallet-management/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wallet-management/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wallet-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wallet-service/src/main/resources" charset="UTF-8" />
   </component>
 </project>

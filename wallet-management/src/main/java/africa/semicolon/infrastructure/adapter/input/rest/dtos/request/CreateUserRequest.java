@@ -1,6 +1,7 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request;
+package africa.semicolon.infrastructure.adapter.input.rest.dtos.request;
 
-import africa.semicolon.wallet.domain.models.Wallet;
+
+import africa.semicolon.domain.models.Wallet;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 

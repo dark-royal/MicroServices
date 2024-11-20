@@ -1,8 +1,8 @@
-package africa.semicolon.wallet.application.port.input.TransactionUseCase;
+package africa.semicolon.application.port.input.TransactionUseCase;
 
-import africa.semicolon.wallet.domain.exceptions.UserNotFoundException;
-import africa.semicolon.wallet.domain.models.Transaction;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.TransactionEntity;
+
+import africa.semicolon.domain.exceptions.UserNotFoundException;
+import africa.semicolon.domain.models.Transaction;
 
 import java.util.List;
 

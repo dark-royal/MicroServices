@@ -1,13 +1,12 @@
 package africa.semicolon.application.port.output;
 
 
-import africa.semicolon.infrastructure.adapter.paystack.dtos.response.*;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializePaymentRequestDto;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializeTransferRequest;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializeMonnifyTransferResponse;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializePaymentResponseDto;
 
-import java.math.BigDecimal;
-
-public interface PaystackPaymentOutputPort {
-    InitializePaymentResponse initializePayment(InitializePaymentDto initializePaymentDto);
-    PaymentVerificationResponse verifyPayment(String reference, Long id) throws Exception;
-    TransferResponse initiateWithdrawal(BigDecimal amount, String recipientCode, String reason)throws Exception;
-    TransferRecipientResponse createRecipient(String name, String accountNumber, String bankCode)throws Exception;
+public interface MonnifyOutputPort {
+    InitializePaymentResponseDto initializePayment(InitializePaymentRequestDto initializePaymentDto);
+    InitializeMonnifyTransferResponse transfer(InitializeTransferRequest request);
 }

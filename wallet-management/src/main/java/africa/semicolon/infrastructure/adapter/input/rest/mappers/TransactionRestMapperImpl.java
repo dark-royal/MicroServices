@@ -1,11 +1,11 @@
-package africa.semicolon.wallet.infrastructure.adapter.input.rest.mappers;
+package africa.semicolon.infrastructure.adapter.input.rest.mappers;
 
-import africa.semicolon.wallet.domain.models.Transaction;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.CreateTransactionRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.request.GetAllTransactionRequest;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.CreateTransactionResponse;
-import africa.semicolon.wallet.infrastructure.adapter.input.rest.dtos.response.GetAllTransactionResponse;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.TransactionEntity;
+
+import africa.semicolon.domain.models.Transaction;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.CreateTransactionRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.GetAllTransactionRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.CreateTransactionResponse;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.GetAllTransactionResponse;
 
 import java.util.List;
 

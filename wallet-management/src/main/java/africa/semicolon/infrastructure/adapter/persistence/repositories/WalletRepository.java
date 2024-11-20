@@ -1,6 +1,7 @@
-package africa.semicolon.wallet.infrastructure.adapter.persistence.repositories;
+package africa.semicolon.infrastructure.adapter.persistence.repositories;
 
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.WalletEntity;
+
+import africa.semicolon.infrastructure.adapter.persistence.entities.WalletEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,7 @@
 package africa.semicolon.infrastructure.adapter.monnify.rrepository;
 
-public class MonnifyRepository {
+import africa.semicolon.infrastructure.adapter.monnify.models.MonifyTransaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MonnifyRepository extends JpaRepository<MonifyTransaction,Long> {
 }

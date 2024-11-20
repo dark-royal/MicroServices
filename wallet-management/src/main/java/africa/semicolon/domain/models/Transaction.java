@@ -1,4 +1,4 @@
-package africa.semicolon.wallet.domain.models;
+package africa.semicolon.domain.models;
 
 
 

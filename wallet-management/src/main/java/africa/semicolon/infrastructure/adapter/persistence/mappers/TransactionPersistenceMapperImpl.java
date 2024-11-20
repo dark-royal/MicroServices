@@ -1,8 +1,8 @@
-package africa.semicolon.wallet.infrastructure.adapter.persistence.mappers;
+package africa.semicolon.infrastructure.adapter.persistence.mappers;
 
-import africa.semicolon.wallet.domain.models.Transaction;
 
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.TransactionEntity;
+import africa.semicolon.domain.models.Transaction;
+import africa.semicolon.infrastructure.adapter.persistence.entities.TransactionEntity;
 
 public class TransactionPersistenceMapperImpl implements TransactionPersistenceMapper {
     @Override

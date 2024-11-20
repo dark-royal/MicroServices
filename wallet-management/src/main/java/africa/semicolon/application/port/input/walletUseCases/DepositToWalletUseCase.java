@@ -1,13 +1,13 @@
-package africa.semicolon.wallet.application.port.input.walletUseCases;
+package africa.semicolon.application.port.input.walletUseCases;
 
-import africa.semicolon.wallet.domain.exceptions.UserNotFoundException;
-import africa.semicolon.wallet.domain.exceptions.WalletNotFoundException;
-import africa.semicolon.wallet.domain.models.Wallet;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.WalletEntity;
+
+import africa.semicolon.domain.exceptions.UserNotFoundException;
+import africa.semicolon.domain.exceptions.WalletNotFoundException;
+import africa.semicolon.domain.models.Wallet;
 
 import java.math.BigDecimal;
 
 public interface DepositToWalletUseCase {
 
-    void depositToWallet(Wallet wallet, BigDecimal amount,Long userId) throws WalletNotFoundException, UserNotFoundException;
+    void depositToWallet(Wallet wallet, Float amount, Long userId) throws WalletNotFoundException, UserNotFoundException;
 }

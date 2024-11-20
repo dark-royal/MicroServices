@@ -1,11 +1,12 @@
-package africa.semicolon.wallet.infrastructure.adapter.persistence;
+package africa.semicolon.infrastructure.adapter;
 
-import africa.semicolon.wallet.application.port.output.UserOutputPort;
-import africa.semicolon.wallet.domain.exceptions.UserNotFoundException;
-import africa.semicolon.wallet.domain.models.User;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.entities.UserEntity;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.mappers.UserPersistenceMapper;
-import africa.semicolon.wallet.infrastructure.adapter.persistence.repositories.UserRepository;
+
+import africa.semicolon.application.port.output.UserOutputPort;
+import africa.semicolon.domain.exceptions.UserNotFoundException;
+import africa.semicolon.domain.models.User;
+import africa.semicolon.infrastructure.adapter.persistence.entities.UserEntity;
+import africa.semicolon.infrastructure.adapter.persistence.mappers.UserPersistenceMapper;
+import africa.semicolon.infrastructure.adapter.persistence.repositories.UserRepository;
 
 import java.util.Optional;
 
