@@ -35,6 +35,9 @@ public class AuthService implements RegisterUseCase, LoginUseCase, UpdateUserUse
             UserEventPayload eventPayload = new UserEventPayload();
             eventPayload.setUserId(user.getKeycloakId());
             eventPayload.setEmail(user.getEmail());
+            eventPayload.setFirstName(user.getFirstName());
+            eventPayload.setLastName(user.getLastName());
+            eventPayload.setPhoneNumber(user.getPhoneNumber());
             eventPayload.setEventType("USER_CREATED");
             identityPulserProducer.sendMessage(eventPayload);
 
@@ -51,6 +54,9 @@ public class AuthService implements RegisterUseCase, LoginUseCase, UpdateUserUse
             UserEventPayload eventPayload = new UserEventPayload();
             eventPayload.setUserId(user.getKeycloakId());
             eventPayload.setEmail(user.getEmail());
+            eventPayload.setFirstName(user.getFirstName());
+            eventPayload.setLastName(user.getLastName());
+            eventPayload.setPhoneNumber(user.getPhoneNumber());
             eventPayload.setEventType("USER_UPDATED");
             identityPulserProducer.sendMessage(eventPayload);
         } catch (PulsarClientException e) {

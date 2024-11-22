@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 public class Wallet {
     private Long id;
+    private Long userId;
     private BigDecimal balance;
     private String pin;
 

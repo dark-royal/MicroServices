@@ -50,14 +50,13 @@ public class MonnifyAdapterTest {
         RestTemplate mockRestTemplate = mock(RestTemplate.class);
         MonnifyRepository mockMonnifyRepository = mock(MonnifyRepository.class);
         MonnifyAdapter monnifyAdapter = new MonnifyAdapter(mockRestTemplate, mockMonnifyRepository);
-
         InitializeTransferRequest requestDto = new InitializeTransferRequest();
-                requestDto.setAmount(1000f);
+                requestDto.setAmount(1000);
                 requestDto.setCurrency("NGN");
-                requestDto.setDestinationBankCode("057");
-                requestDto.setReceiverAccountNumber("");
+                requestDto.setDestinationBankCode("919");
+                requestDto.setReceiverAccountNumber("2093500199");
                 requestDto.setSourceAccountNumber("3561571756");
-                requestDto.setReference("");
+                requestDto.setReference("my_reference");
                 requestDto.setNarration("Transferred successful");
 
         InitializeMonnifyTransferResponse result = monnifyAdapter.transfer(requestDto);

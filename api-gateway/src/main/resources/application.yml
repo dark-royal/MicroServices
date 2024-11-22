@@ -22,4 +22,4 @@ spring:
           issuer-uri: http://localhost:9799/realms/identity/
           jwk-set-uri: http://localhost:9799/realms/identity/protocol/openid-connect/certs
 server:
-  port: 8081
+  port: 1313

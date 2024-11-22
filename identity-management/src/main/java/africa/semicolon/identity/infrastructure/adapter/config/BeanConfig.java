@@ -11,9 +11,11 @@ import africa.semicolon.identity.infrastructure.adapter.persistence.mappers.User
 import africa.semicolon.identity.infrastructure.adapter.persistence.mappers.UserRestMapperImpl;
 import africa.semicolon.identity.infrastructure.adapter.persistence.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.pulsar.client.api.PulsarClient;
 import org.keycloak.admin.client.Keycloak;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.pulsar.core.PulsarProducerFactory;
 import org.springframework.pulsar.core.PulsarTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,8 +39,8 @@ public class BeanConfig {
         return new UserPersistenceAdapter(userRepository, userPersistenceMapper);
 
     }
-
     @Bean
+    @Lazy
     public PulsarTemplate<String> pulsarTemplate(PulsarProducerFactory<String> producerFactory) {
         return new PulsarTemplate<>(producerFactory);
     }
@@ -68,7 +70,7 @@ public class BeanConfig {
 }
 
 @Bean
-    public IdentityPulserProducer identityPulserProducer() throws Exception {
-        return new IdentityPulserProducer();
+    public IdentityPulserProducer identityPulserProducer(PulsarClient pulsarClient) throws Exception {
+        return new IdentityPulserProducer(pulsarClient);
 }
 }

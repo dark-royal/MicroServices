@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class InitializeTransferRequest {
 
-    private Float amount;
+    private double amount;
     private String reference;
     private String narration;
     private String receiverAccountNumber;

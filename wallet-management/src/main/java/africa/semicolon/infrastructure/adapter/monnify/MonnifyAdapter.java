@@ -11,6 +11,7 @@ import africa.semicolon.infrastructure.adapter.monnify.rrepository.MonnifyReposi
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 @AllArgsConstructor
+@Slf4j
 public class MonnifyAdapter implements MonnifyOutputPort {
 
     private final  RestTemplate restTemplate;
@@ -58,15 +60,24 @@ public class MonnifyAdapter implements MonnifyOutputPort {
 
 
     private MonnifyAuthenticationResponse generateAccessToken() {
-        String encodedCredentials = monnifyApiKey + ":" + monnifyApiSecret;
-        encodedCredentials = Base64.getEncoder().encodeToString(encodedCredentials.getBytes());
+        String encodedCredentials = Base64.getEncoder().encodeToString((monnifyApiKey + ":" + monnifyApiSecret).getBytes());
+
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Basic " + encodedCredentials);
+
         HttpEntity<String> entity = new HttpEntity<>("{}", headers);
-        ResponseEntity<MonnifyAuthenticationResponse> response = restTemplate.postForEntity(loginUrl, entity, MonnifyAuthenticationResponse.class);
-        return response.getBody();
+        ResponseEntity<MonnifyAuthenticationResponse> response = null;
+        try {
+            response = restTemplate.postForEntity(loginUrl, entity, MonnifyAuthenticationResponse.class);
+            log.info("Access token response: {}", response);
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("Failed to generate access token: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to connect to Monnify: " + e.getMessage(), e);
+        }
     }
+
 
     private String getAccessToken() {
         MonnifyAuthenticationResponse authResponse = generateAccessToken();
@@ -116,26 +127,22 @@ public class MonnifyAdapter implements MonnifyOutputPort {
 
     @Override
     public InitializeMonnifyTransferResponse transfer(InitializeTransferRequest request) {
-        String accessToken = getAccessToken();
+
         String reference = generateReference();
+        String accessToken = getAccessToken();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-
         HttpEntity<String> entity = getStringHttpEntity(request, reference, headers);
-
         try {
             ResponseEntity<InitializeMonnifyTransferResponse> responseEntity = restTemplate.postForEntity(
                     baseUrl + transferUrl,
                     entity,
                     InitializeMonnifyTransferResponse.class
             );
-
             return getInitializeMonnifyTransferResponse(responseEntity);
-
-
         } catch (Exception e) {
             InitializeMonnifyTransferResponse transferResponse = new InitializeMonnifyTransferResponse();
             transferResponse.setRequestSuccessful(false);
@@ -168,7 +175,7 @@ public class MonnifyAdapter implements MonnifyOutputPort {
                         "\"currency\": \"NGN\", " +
                         "\"sourceAccountNumber\": \"3561571756\" }",  // Your source account number
                 request.getAmount(),
-                reference,
+                request.getReference(),
                 request.getNarration(),
                 request.getReceiverAccountNumber()
         );

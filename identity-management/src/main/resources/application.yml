@@ -12,7 +12,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:1212/eureka/
 
 app:
   keycloak:
@@ -23,4 +23,4 @@ app:
     serverUrl: http://localhost:9799
     tokenUrl: http://localhost:9799/realms/identity/protocol/openid-connect/token
 server:
-  port: 1999
+  port: 1414

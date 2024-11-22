@@ -12,6 +12,7 @@ import africa.semicolon.domain.exceptions.WalletAlreadyExistAlreadyException;
 import africa.semicolon.domain.exceptions.WalletNotFoundException;
 import africa.semicolon.domain.models.Transaction;
 import africa.semicolon.domain.models.User;
+import africa.semicolon.domain.models.UserEventPayload;
 import africa.semicolon.domain.models.Wallet;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializePaymentRequestDto;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializeTransferRequest;
@@ -46,11 +47,13 @@ public class WalletService implements CreateWalletUseCase, FindWalletByIdUsesCas
     }
 
     @Override
-    public Wallet createWallet(Wallet wallet) throws WalletAlreadyExistAlreadyException {
-        verifyWalletExistence(wallet.getId());
-        wallet = walletOutputPort.saveWallet(wallet);
-
-        return wallet;
+    public Wallet createWalletForUser(UserEventPayload userEvent) {
+        Wallet wallet = new Wallet();
+        wallet.setUserId(userEvent.getUserId());
+        wallet.setBalance(BigDecimal.ZERO);
+        Wallet savedWallet = walletOutputPort.saveWallet(wallet);
+        log.info("Wallet created for user ID: {}", userEvent.getUserId());
+        return savedWallet;
     }
 
     @Override
