@@ -24,16 +24,17 @@ public class KeycloakAdapterTest {
     public void testThatUserCanBeCreated() throws UserNotFoundException, UserNotFoundException, UserAlreadyExistsException {
         User user = User
                 .builder()
-                .email("cheist4@gmail.com")
-                .firstName("ajiri")
-                .lastName("ogeh")
+                .id(200L)
+                .email("Andrei@gmail.com")
+                .firstName("solo")
+                .lastName("mon")
                 .password("tobi")
                 .role("USER")
                 .createdOn(LocalDateTime.now())
-                .phoneNumber("09038942436")
+                .phoneNumber("09039942437")
                 .build();
         user = keycloakAdapter.createUser(user);
-        assertThat(user.getEmail()).isEqualTo("cheist4@gmail.com");
+        assertThat(user.getEmail()).isEqualTo("Andrei@gmail.com");
 
 
 
@@ -44,7 +45,7 @@ public class KeycloakAdapterTest {
     public void testThatUserCannotRegisterWithTheSameEmail() throws UserNotFoundException, UserAlreadyExistsException {
         User user = User
                 .builder()
-                .email("cheist4@gmail.com")
+                .email("cheist@gmail.com")
                 .firstName("Praise")
                 .role("USER")
                 .password("password")
@@ -57,7 +58,7 @@ public class KeycloakAdapterTest {
     @Test
     public void testLoginUserSuccess() throws AuthenticationException, UserNotFoundException, InvalidPasswordException {
         LoginUserRequest loginUserRequest = new LoginUserRequest();
-        loginUserRequest.setEmail("cheist4@gmail.com");
+        loginUserRequest.setEmail("Andrei@gmail.com");
         loginUserRequest.setPassword("tobi");
         LoginUserResponse response1 = keycloakAdapter.loginUser(loginUserRequest);
         assertNotNull(response1.getAccessToken());
@@ -70,7 +71,7 @@ public class KeycloakAdapterTest {
     @Test
     public void testThatUserCanEditDetails() throws UserNotFoundException, PhoneNumberNotFoundException, UserAlreadyExistsException {
         User user = new User();
-        user.setEmail("cheist4@gmail.com");
+        user.setEmail("cheist@gmail.com");
         user.setPhoneNumber("09038942436");
         user.setFirstName("Hannah");
         user.setLastName("david");
@@ -93,7 +94,7 @@ public class KeycloakAdapterTest {
     @Test
     public void testThatUserCanBeDeleted() throws UserNotFoundException {
         User user = new User();
-        user.setEmail("chiest4@gamil.com");
+        user.setEmail("cheist@gmail.com");
         keycloakAdapter.deleteUser(user.getEmail());
         assertThat(user).isNotNull();
 

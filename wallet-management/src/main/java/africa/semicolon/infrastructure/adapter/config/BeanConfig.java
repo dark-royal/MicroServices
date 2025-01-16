@@ -1,17 +1,12 @@
 package africa.semicolon.infrastructure.adapter.config;
 
-import africa.semicolon.application.port.output.MonnifyOutputPort;
-import africa.semicolon.application.port.output.TransactionOutputPort;
-import africa.semicolon.application.port.output.UserOutputPort;
-import africa.semicolon.application.port.output.WalletOutputPort;
+import africa.semicolon.application.port.output.*;
 import africa.semicolon.domain.services.WalletService;
-import africa.semicolon.infrastructure.adapter.TransactionPersistenceAdapter;
-import africa.semicolon.infrastructure.adapter.UserPersistenceAdapter;
-import africa.semicolon.infrastructure.adapter.WalletPersistenceAdapter;
-import africa.semicolon.infrastructure.adapter.WalletPulsarListener;
+import africa.semicolon.infrastructure.adapter.*;
 import africa.semicolon.infrastructure.adapter.monnify.MonnifyAdapter;
 import africa.semicolon.infrastructure.adapter.monnify.rrepository.MonnifyRepository;
 import africa.semicolon.infrastructure.adapter.persistence.mappers.*;
+import africa.semicolon.infrastructure.adapter.persistence.repositories.SavingGoalRepository;
 import africa.semicolon.infrastructure.adapter.persistence.repositories.TransactionRepository;
 import africa.semicolon.infrastructure.adapter.persistence.repositories.UserRepository;
 import africa.semicolon.infrastructure.adapter.persistence.repositories.WalletRepository;
@@ -33,13 +28,23 @@ public class BeanConfig {
                                        MonnifyOutputPort monnifyOutputPort,
                                        UserOutputPort userOutputPort,
                                        TransactionOutputPort transactionOutputPort,
-                                       TransactionPersistenceMapper transactionPersistenceMapper) {
-        return new WalletService(walletOutputPort, monnifyOutputPort, userOutputPort, transactionOutputPort, transactionPersistenceMapper);
+                                       TransactionPersistenceMapper transactionPersistenceMapper,
+                                       SavingsGoalOutputPort savingsGoalOutputPort) {
+        return new WalletService(walletOutputPort, monnifyOutputPort, userOutputPort, transactionOutputPort, transactionPersistenceMapper,savingsGoalOutputPort);
     }
 
     @Bean
+    public SavingsGoalOutputPort savingsGoalOutputPort(SavingGoalRepository savingGoalRepository, SavingsGoalPersistenceMapper savingsGoalPersistenceMapper){
+        return new SavingGoalPersistenceAdapter(savingsGoalPersistenceMapper,savingGoalRepository);
+    }
+    @Bean
     public TransactionPersistenceMapper transactionPersistenceMapper() {
         return new TransactionPersistenceMapperImpl();
+    }
+
+    @Bean
+    public SavingsGoalPersistenceMapper savingsGoalPersistenceMapper(){
+        return new SavingsGoalPersistenceMapperImpl();
     }
 
     @Bean

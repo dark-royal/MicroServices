@@ -1,32 +1,44 @@
 package africa.semicolon.infrastructure.adapter.monnify.dtos.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 public class MonnifyAuthenticationResponse {
-
-    private String requestSuccessful;
-    private String responseMessage;
     private String responseCode;
+    private String responseMessage;
+    private String responseSuccessful;
+    private MonnifyAuthResponseBody responseBody;
+
+
     @Setter
     @Getter
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private AuthenticationResponseBody responseBody;
-
-
-
-    @Setter
-    @Getter
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AuthenticationResponseBody {
-        @JsonProperty("accessToken")
+    public static class MonnifyAuthResponseBody {
         private String accessToken;
+        private long expiresIn;
+        private String accountNumber;
+        private String accountName;
+        private String bankName;
+        private String bankCode;
+        private String accountDurationSeconds;
+        private String ussdPayment;
+        private String requestTime;
+        private String expiresOn;
+        private String transactionReference;
+        private String paymentReference;
+        private BigDecimal amount;
+        private int fee;
+        private BigDecimal totalPayable;
+        private String collectionChannel;
+        private String production;
 
-        @JsonProperty("expiresIn")
-        private Long expiresIn;
+
 
     }
 }
+
+
+

@@ -1,18 +1,21 @@
 spring:
   application:
     name: identity-management
-  datasource:
-    url: jdbc:postgresql://localhost/Identity_Manager
-    password: oluwakemisola098
-    username: postgres
+
+
   pulsar:
     client:
-          service-url: pulsar://localhost:6650
+          service-url: pulsar://localhost:6655
+  datasource:
+    username: postgres
+    password: oluwakemisola098
+    url: jdbc:postgresql://localhost:5432/Identity_Manager
+
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:1212/eureka/
+      defaultZone: http://localhost:8761/eureka/
 
 app:
   keycloak:
@@ -23,4 +26,4 @@ app:
     serverUrl: http://localhost:9799
     tokenUrl: http://localhost:9799/realms/identity/protocol/openid-connect/token
 server:
-  port: 1414
+  port: 1818

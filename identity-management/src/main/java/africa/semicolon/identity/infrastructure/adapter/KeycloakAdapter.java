@@ -66,7 +66,7 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
         UserRepresentation userRepresentation = createUserRepresentation(user);
         Response response = getUsersResource().create(userRepresentation);
         log.info("Keycloak user creation response status: {}", response.getStatus());
-        log.info("craeted:{}",response);
+        log.info("created:{}",response);
         if (response.getStatus() != STATUS_CREATED) {
             throw new UserAlreadyExistsException("Failed to create user in Keycloak");
         }
@@ -131,7 +131,7 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
         if (users.isEmpty()) {
             throw new UserNotFoundException("User not found");
         }
-        return users.get(0);
+        return users.getFirst();
     }
 
     private ResponseEntity<String> authenticateUserWithKeycloak(LoginUserRequest loginUserRequest) {
@@ -177,20 +177,34 @@ public class KeycloakAdapter implements IdentityManagerOutputPort {
     }
 
     @Override
-    public User editUser(String email, User user){
-//        UserResource userResource = getUsersResource().get(email);
+    public User editUser(String email, User user) {
         UserRepresentation userRepresentation = null;
         try {
-            userRepresentation = getUsersResource().search(email, true).getFirst();
+            List<UserRepresentation> searchResults = getUsersResource().search(email, true);
+            if (searchResults.isEmpty()) {
+                throw new UserNotFoundException("User with email " + email + " not found.");
+            }
+
+            userRepresentation = searchResults.get(0);
         } catch (UserNotFoundException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new UserNotFoundException(e.getMessage());
         }
-        UserResource userResource = getUsersResource().get(userRepresentation.getEmail());
-        if(user.getEmail() != null) userRepresentation.setEmail(user.getEmail());
-        if(user.getFirstName() != null) userRepresentation.setFirstName(user.getFirstName());
-        if(user.getLastName() != null) userRepresentation.setLastName(user.getLastName());
-        //if(user.getEmail() != null) userRepresentation.setUsername(user.getEmail());
+
+        UserResource userResource = getUsersResource().get(userRepresentation.getId());
+
+        if (user.getEmail() != null){
+            userRepresentation.setEmail(user.getEmail());
+        }
+        else{
+            throw new UserNotFoundException("user not found");
+        }
+        if (user.getFirstName() != null) userRepresentation.setFirstName(user.getFirstName());
+        if (user.getLastName() != null) userRepresentation.setLastName(user.getLastName());
+        if (user.getEmail() != null) userRepresentation.setUsername(user.getEmail());
+
         userResource.update(userRepresentation);
+
         return user;
     }
+
 }

@@ -1,59 +1,73 @@
 package africa.semicolon.infrastructure.adapter;
 
+import africa.semicolon.domain.exceptions.WalletAlreadyExistAlreadyException;
+import africa.semicolon.domain.exceptions.WalletNotFoundException;
 import africa.semicolon.domain.models.UserEventPayload;
+import africa.semicolon.domain.models.Wallet;
 import africa.semicolon.domain.services.WalletService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pulsar.client.api.Consumer;
-import org.apache.pulsar.client.api.Message;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.Schema;
-import org.apache.pulsar.client.api.SubscriptionType;
+import org.apache.pulsar.client.api.*;
+
+import java.util.Optional;
 
 @Slf4j
 public class WalletPulsarListener {
 
     private final PulsarClient pulsarClient;
-    private final WalletService walletCreationService;
+    private final WalletService walletService;
     private Consumer<UserEventPayload> consumer;
 
     public WalletPulsarListener(PulsarClient pulsarClient, WalletService walletCreationService) {
         this.pulsarClient = pulsarClient;
-        this.walletCreationService = walletCreationService;
+        this.walletService = walletCreationService;
     }
 
     public void startListening() {
         try {
+
+            if (pulsarClient.isClosed()) {
+                log.error("Pulsar client is already closed");
+                return;
+            }
             consumer = pulsarClient.newConsumer(Schema.JSON(UserEventPayload.class))
                     .topic("identity-topic")
                     .subscriptionName("wallet-service-subscription")
                     .subscriptionType(SubscriptionType.Exclusive)
                     .subscribe();
 
-            while (true) {
-                try {
-                    Message<UserEventPayload> message = consumer.receive();
-                    UserEventPayload userEvent = message.getValue();
-                    log.info("Received user creation event: {}", userEvent);
+            log.info("Pulsar listener started for topic: identity-topic");
 
-                    walletCreationService.createWalletForUser(userEvent);
+            while (true) {
+                Message<UserEventPayload> message = consumer.receive();
+                try {
+                    UserEventPayload userEvent = message.getValue();
+                    log.info("Received User Event: {}", userEvent);
+                    handleUserEvent(userEvent);
+
                     consumer.acknowledge(message);
                 } catch (Exception e) {
-                    log.error("Error while processing user creation event", e);
+                    log.error("Failed to process message", e);
+                    consumer.negativeAcknowledge(message);
+                }
+            }
+        } catch (PulsarClientException e) {
+            log.error("Failed to start Pulsar Consumer", e);
+        }
 
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error initializing Pulsar consumer", e);
-        } finally {
-            if (consumer != null) {
-                try {
-                    consumer.close();
-                } catch (Exception e) {
-                    log.error("Error closing Pulsar consumer", e);
-                }
-            }
+    }
+
+    private void handleUserEvent(UserEventPayload userEvent) throws WalletNotFoundException, WalletAlreadyExistAlreadyException {
+        Long userId = userEvent.getUserId();
+        Optional<Wallet> existingWallet = walletService.findByUserId(userId);
+
+        if (existingWallet.isEmpty()) {
+            walletService.createWalletForUser(userId);
+            log.info("Wallet created for user ID: {}", userId);
+        } else {
+            log.info("Wallet already exists for user ID: {}", userId);
         }
     }
+
 
 
 }

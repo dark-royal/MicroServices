@@ -3,14 +3,11 @@ package africa.semicolon.infrastructure.adapter.monnify;
 import africa.semicolon.application.port.output.MonnifyOutputPort;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializePaymentRequestDto;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializeTransferRequest;
-import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializeMonnifyTransferResponse;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializePaymentResponseDto;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.response.MonnifyAuthenticationResponse;
 import africa.semicolon.infrastructure.adapter.monnify.models.MonifyTransaction;
 import africa.semicolon.infrastructure.adapter.monnify.rrepository.MonnifyRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -47,9 +44,9 @@ public class MonnifyAdapter implements MonnifyOutputPort {
     @Value("${spring.monnify.transaction.transfer_url}")
     private String transferUrl;
 
-
     @Value("${spring.monnify.base_url}")
     private String baseUrl;
+
     @Value("${spring.monnify.transaction.initiate_url}")
     private String initiateUrl;
 
@@ -67,9 +64,9 @@ public class MonnifyAdapter implements MonnifyOutputPort {
         headers.set("Authorization", "Basic " + encodedCredentials);
 
         HttpEntity<String> entity = new HttpEntity<>("{}", headers);
-        ResponseEntity<MonnifyAuthenticationResponse> response = null;
+
         try {
-            response = restTemplate.postForEntity(loginUrl, entity, MonnifyAuthenticationResponse.class);
+            ResponseEntity<MonnifyAuthenticationResponse> response = restTemplate.postForEntity(loginUrl, entity, MonnifyAuthenticationResponse.class);
             log.info("Access token response: {}", response);
             return response.getBody();
         } catch (Exception e) {
@@ -86,6 +83,32 @@ public class MonnifyAdapter implements MonnifyOutputPort {
 
     private String generateReference() {
         return "TXN-" + UUID.randomUUID();
+    }
+
+    @Override
+    public MonnifyAuthenticationResponse transfer(InitializeTransferRequest request) {
+
+        String reference = generateReference();
+        String accessToken = getAccessToken();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = getStringHttpEntity(request, reference, headers);
+        try {
+            ResponseEntity<MonnifyAuthenticationResponse> responseEntity = restTemplate.postForEntity(
+                    baseUrl + transferUrl,
+                    entity,
+                    MonnifyAuthenticationResponse.class
+            );
+            return getInitializeMonnifyTransferResponse(responseEntity);
+        } catch (Exception e) {
+            MonnifyAuthenticationResponse transferResponse = new MonnifyAuthenticationResponse();
+            transferResponse.setResponseMessage("Failed to initiate transfer: " + e.getMessage());
+            transferResponse.setResponseCode("TRANSFER_ERROR");
+            return transferResponse;
+        }
     }
 
     @Override
@@ -125,40 +148,12 @@ public class MonnifyAdapter implements MonnifyOutputPort {
         return transaction;
     }
 
-    @Override
-    public InitializeMonnifyTransferResponse transfer(InitializeTransferRequest request) {
-
-        String reference = generateReference();
-        String accessToken = getAccessToken();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> entity = getStringHttpEntity(request, reference, headers);
-        try {
-            ResponseEntity<InitializeMonnifyTransferResponse> responseEntity = restTemplate.postForEntity(
-                    baseUrl + transferUrl,
-                    entity,
-                    InitializeMonnifyTransferResponse.class
-            );
-            return getInitializeMonnifyTransferResponse(responseEntity);
-        } catch (Exception e) {
-            InitializeMonnifyTransferResponse transferResponse = new InitializeMonnifyTransferResponse();
-            transferResponse.setRequestSuccessful(false);
-            transferResponse.setResponseMessage("Failed to initiate transfer: " + e.getMessage());
-            transferResponse.setResponseCode("TRANSFER_ERROR");
-            return transferResponse;
-        }
-    }
-
-    private static InitializeMonnifyTransferResponse getInitializeMonnifyTransferResponse(ResponseEntity<InitializeMonnifyTransferResponse> responseEntity) {
-        InitializeMonnifyTransferResponse transferResponse = responseEntity.getBody();
+    private static MonnifyAuthenticationResponse getInitializeMonnifyTransferResponse(ResponseEntity<MonnifyAuthenticationResponse> responseEntity) {
+        MonnifyAuthenticationResponse transferResponse = responseEntity.getBody();
         if (transferResponse != null) {
-            transferResponse.setRequestSuccessful(true);
+            transferResponse.setResponseMessage("Transfer is successful");
         } else {
-            transferResponse = new InitializeMonnifyTransferResponse();
-            transferResponse.setRequestSuccessful(false);
+            transferResponse = new MonnifyAuthenticationResponse();
             transferResponse.setResponseMessage("Transfer response is empty");
             transferResponse.setResponseCode("EMPTY_RESPONSE");
         }

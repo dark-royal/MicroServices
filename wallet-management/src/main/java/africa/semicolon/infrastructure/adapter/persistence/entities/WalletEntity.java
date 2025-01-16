@@ -15,4 +15,6 @@ public class WalletEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private BigDecimal balance;
+    @ManyToOne
+    private UserEntity userId;
 }

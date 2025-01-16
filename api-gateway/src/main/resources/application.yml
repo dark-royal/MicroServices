@@ -14,6 +14,10 @@ spring:
           uri: lb://IDENTITY-MANAGEMENT
           predicates:
             - Path=/api/v1/users/**
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8765/eureka/
 
   security:
     oauth2:
@@ -22,4 +26,4 @@ spring:
           issuer-uri: http://localhost:9799/realms/identity/
           jwk-set-uri: http://localhost:9799/realms/identity/protocol/openid-connect/certs
 server:
-  port: 1313
+  port: 1717

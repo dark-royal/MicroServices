@@ -1,12 +1,15 @@
 package africa.semicolon.infrastructure.adapter.input.rest.mappers;
 
+import africa.semicolon.domain.models.SavingsGoal;
 import africa.semicolon.domain.models.Wallet;
 import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.CreateWalletRequest;
 import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.DepositToWalletRequest;
 import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.FindWalletRequest;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.request.SavingGoalRequest;
 import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.CreateWalletResponse;
 import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.DepositToWalletResponse;
 import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.FindWalletResponse;
+import africa.semicolon.infrastructure.adapter.input.rest.dtos.response.SavingGoalResponse;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +19,7 @@ public class WalletRestMapperImpl implements WalletRestMapper {
         Wallet wallet = new Wallet();
         wallet.setId(createWalletRequest.getWalletId());
         wallet.setBalance(createWalletRequest.getBalance());
+        wallet.setUserId(createWalletRequest.getUserId());
         return wallet;
     }
 
@@ -25,6 +29,7 @@ public class WalletRestMapperImpl implements WalletRestMapper {
         response.setWalletId(wallet.getId());
         response.setBalance(wallet.getBalance());
         response.setCreatedAt(LocalDateTime.now());
+        response.setUserId(wallet.getUserId());
         return response;
     }
 
@@ -57,5 +62,15 @@ public class WalletRestMapperImpl implements WalletRestMapper {
         response.setWalletId(wallet.getId());
         //response.setAmount(wallet.getBalance());
         return response;
+    }
+
+    @Override
+    public SavingsGoal toSave(SavingGoalRequest savingGoalRequest) {
+        return null;
+    }
+
+    @Override
+    public SavingGoalResponse toSavingGoalResponse(SavingsGoal savingsGoal) {
+        return null;
     }
 }

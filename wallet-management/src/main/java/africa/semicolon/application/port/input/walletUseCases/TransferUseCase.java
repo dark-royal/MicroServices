@@ -7,5 +7,5 @@ import africa.semicolon.domain.models.Wallet;
 import java.math.BigDecimal;
 
 public interface TransferUseCase {
-    void transfer(Wallet wallet, Float amount, Long userId, String receiverAccountNumber) throws WalletNotFoundException, UserNotFoundException;
+    void transfer(Wallet wallet, Float amount, Long userId, String receiverAccountNumber,String pin) throws WalletNotFoundException, UserNotFoundException;
 }

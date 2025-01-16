@@ -3,20 +3,17 @@ package africa.semicolon.monnifyAdapter;
 import africa.semicolon.infrastructure.adapter.monnify.MonnifyAdapter;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializePaymentRequestDto;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.request.InitializeTransferRequest;
-import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializeMonnifyTransferResponse;
 import africa.semicolon.infrastructure.adapter.monnify.dtos.response.InitializePaymentResponseDto;
+import africa.semicolon.infrastructure.adapter.monnify.dtos.response.MonnifyAuthenticationResponse;
 import africa.semicolon.infrastructure.adapter.monnify.rrepository.MonnifyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest
@@ -59,9 +56,9 @@ public class MonnifyAdapterTest {
                 requestDto.setReference("my_reference");
                 requestDto.setNarration("Transferred successful");
 
-        InitializeMonnifyTransferResponse result = monnifyAdapter.transfer(requestDto);
+        MonnifyAuthenticationResponse result = monnifyAdapter.transfer(requestDto);
         assertNotNull(result);
-        assertTrue(result.isRequestSuccessful());
+        assertEquals("Transfer is successful",result.getResponseMessage());
     }
 
 }
